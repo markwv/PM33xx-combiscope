@@ -7,7 +7,7 @@ class PM33xx:
 	probeIndexList={'1:1':0,'10:1':1,'20:1':2,'50:1':3,'100:1':4}
 
 	def __init__(self, address):
-		self.PRIMARY_ADDR = 30
+		self.PRIMARY_ADDR = address
 		self.SECONDARY_ADDR = 0
 
 		self.conn = Gpib(0,self.PRIMARY_ADDR,self.SECONDARY_ADDR+96)
