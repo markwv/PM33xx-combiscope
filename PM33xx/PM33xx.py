@@ -89,16 +89,15 @@ class PM33xx:
 
 	def checkForTrigger(self):
 		self.conn.write("*ESR?")
-		eventStatusRegister = (int(conn.read()) == 1)
-		return eventStatusRegister
+		statusValue = int(self.conn.read())
+		aquisitionDone = (statusValue==1)			
+		return aquisitionDone
 
 	def waitForTrigger(self):
-		eventStatusRegister=False
+		aquisitionDone=False
 
-		while(not eventStatusRegister):
-			self.conn.write("*ESR?")
-			eventStatusRegister = int(self.conn.read())
-			#print("Waiting for trigger")
+		while(not aquisitionDone):			
+			aquisitionDone = self.checkForTrigger()
 			time.sleep(0.001)
 
 	def readTraces(self):
@@ -139,9 +138,7 @@ class PM33xx:
 
 		self.conn.write("SENSe:SWEep:TIME?")
 		Tsweep = float(self.conn.read())
-		Tsample = Tsweep / float(self.NUM_SAMPLES)
-		print(Tsweep, Tsample)					
-
+		Tsample = Tsweep / float(self.NUM_SAMPLES)						
 		timeScale = numpy.arange(0,Tsweep,Tsample)	
 
 		return traceList,timeScale	
